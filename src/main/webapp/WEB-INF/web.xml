@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0" metadata-complete="true">
+
+	<!-- 项目名称 -->
+	<display-name>uncode-schedule-manage</display-name>
+
+	<!-- 使用ContextLoaderListener配置时，需要告诉它Spring配置文件的位置 -->
+	<!-- 如果没有指定，上下文载入器会在/WEB-INF/applicationContext.xml中找Spring配置文件 -->
+	<!-- 我们可以通过在Servlet上下文中设置contextConfigLocation参数，来为上下文载入器指定一个或多个Spring配置文件 -->
+	<!-- 注意：contextConfigLocation参数是一个用逗号分隔的路径列表，其路径是相对于Web系统的根路径的 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+        	classpath:applicationContext.xml
+        </param-value>
+	</context-param>
+	<!-- 配置上下文载入器 -->
+	<!-- 上下文载入器载入除DispatcherServlet载入的配置文件之外的其它上下文配置文件 -->
+	<!-- 最常用的上下文载入器是一个Servlet监听器，其名称为ContextLoaderListener -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 配置 uncode schedule 管理后台 -->
+	<servlet>
+		<servlet-name>UncodeSchedule</servlet-name>
+		<servlet-class>cn.uncode.schedule.web.ManagerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UncodeSchedule</servlet-name>
+		<url-pattern>/uncode/schedule</url-pattern>
+	</servlet-mapping>
+
+	<!-- 配置session超时时间，单位分钟 -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
