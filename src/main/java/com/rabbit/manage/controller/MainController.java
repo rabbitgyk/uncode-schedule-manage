@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainController {
 	private Logger log = LoggerFactory.getLogger(MainController.class);
 
+	@RequestMapping("/page")
+	public String mPage(){
+		return "manage";
+	}
+	
 	@RequestMapping("/name")
 	@ResponseBody
 	public String name(String name){
