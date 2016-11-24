@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.uncode.schedule.ConsoleManager;
@@ -30,7 +31,7 @@ public class MainController {
 		return "manage";
 	}
 	
-	@RequestMapping("/servers")
+	@RequestMapping(value="/servers", method =RequestMethod.GET)
 	@ResponseBody
 	public String servers(){
 		ZKScheduleManager manager = null;
@@ -63,7 +64,7 @@ public class MainController {
 		return JSONObject.toJSONString(result);
 	}
 	
-	@RequestMapping("/tasks")
+	@RequestMapping(value="/tasks", method =RequestMethod.GET)
 	@ResponseBody
 	public String tasks(){
 		List<TaskDefineShow> tasksShow = new ArrayList<TaskDefineShow>();
@@ -83,7 +84,7 @@ public class MainController {
 		return JSONObject.toJSONString(tasksShow);
 	}
 	
-	@RequestMapping("/task")
+	@RequestMapping(value="/task", method =RequestMethod.DELETE)
 	@ResponseBody
 	public String delTask(String targetBean, String targetMethod){
 		JSONObject result = new JSONObject();
@@ -102,7 +103,7 @@ public class MainController {
 		return result.toJSONString();
 	}
 	
-	@RequestMapping("/task")
+	@RequestMapping(value="/task", method =RequestMethod.POST)
 	@ResponseBody
 	public String addTask(TaskDefine taskDefine){
 		JSONObject result = new JSONObject();
