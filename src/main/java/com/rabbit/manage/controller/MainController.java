@@ -1,20 +1,24 @@
 package com.rabbit.manage.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-
 import cn.uncode.schedule.ConsoleManager;
 import cn.uncode.schedule.ZKScheduleManager;
+import cn.uncode.schedule.core.TaskDefine;
+
+import com.alibaba.fastjson.JSONObject;
+import com.rabbit.manage.model.TaskDefineShow;
 
 @Controller
 @RequestMapping("/main")
@@ -28,7 +32,7 @@ public class MainController {
 	
 	@RequestMapping("/servers")
 	@ResponseBody
-	public String name(){
+	public String servers(){
 		ZKScheduleManager manager = null;
 		try {
 			manager = ConsoleManager.getScheduleManager();
@@ -58,4 +62,59 @@ public class MainController {
 		}
 		return JSONObject.toJSONString(result);
 	}
+	
+	@RequestMapping("/tasks")
+	@ResponseBody
+	public String tasks(){
+		List<TaskDefineShow> tasksShow = new ArrayList<TaskDefineShow>();
+		List<TaskDefine> tasks = ConsoleManager.queryScheduleTask();
+		log.info("获取到的所有的task list：" + JSONObject.toJSONString(tasks));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		for(TaskDefine task : tasks){
+			TaskDefineShow taskDefineShow = new TaskDefineShow(task);
+			if(task.getLastRunningTime() > 0){
+				taskDefineShow.setLastRunningTimeShow(sdf.format(task.getLastRunningTime()));
+			}else{
+				taskDefineShow.setLastRunningTimeShow("-");
+			}
+			
+			tasksShow.add(taskDefineShow);
+		}
+		return JSONObject.toJSONString(tasksShow);
+	}
+	
+	@RequestMapping("/task")
+	@ResponseBody
+	public String delTask(String targetBean, String targetMethod){
+		JSONObject result = new JSONObject();
+		if(StringUtils.isEmpty(targetBean) || StringUtils.isEmpty(targetMethod)){
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "bean or method is null");
+			return result.toJSONString();
+		}
+		TaskDefine taskDefine = new TaskDefine();
+		taskDefine.setTargetBean(targetBean);
+		taskDefine.setTargetMethod(targetMethod);
+		ConsoleManager.delScheduleTask(taskDefine);
+		
+		result.put("returnCode", "0000");
+		result.put("returnMsg", "del success");
+		return result.toJSONString();
+	}
+	
+	@RequestMapping("/task")
+	@ResponseBody
+	public String addTask(TaskDefine taskDefine){
+		JSONObject result = new JSONObject();
+		taskDefine.setType(TaskDefine.TASK_TYPE_UNCODE);
+		// || StringUtils.isNotEmpty(taskDefine.getPeriod()+"")
+		if(StringUtils.isNotEmpty(taskDefine.getCronExpression())){
+			ConsoleManager.addScheduleTask(taskDefine);
+		}
+		
+		result.put("returnCode", "0000");
+		result.put("returnMsg", "add success");
+		return result.toJSONString();
+	}
+	
 }
