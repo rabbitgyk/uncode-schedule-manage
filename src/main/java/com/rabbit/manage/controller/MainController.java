@@ -46,7 +46,7 @@ public class MainController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		log.info("获取到的所有的server node：" + JSONObject.toJSONString(servers));
+		log.info("获取到的所有的server node：{}", JSONObject.toJSONString(servers));
 		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
 		if(servers != null){
     		for(int i=0; i< servers.size();i++){
@@ -69,7 +69,7 @@ public class MainController {
 	public String tasks(){
 		List<TaskDefineShow> tasksShow = new ArrayList<TaskDefineShow>();
 		List<TaskDefine> tasks = ConsoleManager.queryScheduleTask();
-		log.info("获取到的所有的task list：" + JSONObject.toJSONString(tasks));
+		log.info("获取到的所有的task list：{}", JSONObject.toJSONString(tasks));
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for(TaskDefine task : tasks){
 			TaskDefineShow taskDefineShow = new TaskDefineShow(task);
@@ -106,6 +106,7 @@ public class MainController {
 	@RequestMapping(value="/task", method =RequestMethod.POST)
 	@ResponseBody
 	public String addTask(TaskDefine taskDefine){
+		log.info("添加定时任务：{}", JSONObject.toJSONString(taskDefine));
 		JSONObject result = new JSONObject();
 		taskDefine.setType(TaskDefine.TASK_TYPE_UNCODE);
 		// || StringUtils.isNotEmpty(taskDefine.getPeriod()+"")
