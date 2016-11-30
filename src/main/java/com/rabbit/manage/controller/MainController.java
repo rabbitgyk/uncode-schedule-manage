@@ -64,6 +64,20 @@ public class MainController {
 		return JSONObject.toJSONString(result);
 	}
 	
+	@RequestMapping(value="/server/ips", method =RequestMethod.GET)
+	@ResponseBody
+	public String serverIps(){
+		List<String> serverIps = null;
+		try {
+			serverIps = ConsoleManager.getServerIps();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		log.info("获取到的所有的server ip：{}", JSONObject.toJSONString(serverIps));
+		return JSONObject.toJSONString(serverIps);
+	}
+	
 	@RequestMapping(value="/tasks", method =RequestMethod.GET)
 	@ResponseBody
 	public String tasks(){
