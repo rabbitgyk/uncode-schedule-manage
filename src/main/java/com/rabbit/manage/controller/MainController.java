@@ -98,7 +98,7 @@ public class MainController {
 		return JSONObject.toJSONString(tasksShow);
 	}
 	
-	@RequestMapping(value="/task", method =RequestMethod.DELETE)
+	@RequestMapping(value="/task/del", method =RequestMethod.GET)
 	@ResponseBody
 	public String delTask(String targetBean, String targetMethod){
 		JSONObject result = new JSONObject();
