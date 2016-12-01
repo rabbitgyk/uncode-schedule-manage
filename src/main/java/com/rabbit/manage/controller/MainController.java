@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -93,6 +94,12 @@ public class MainController {
 				taskDefineShow.setLastRunningTimeShow("-");
 			}
 			
+			if(task.getStartTime() != null){
+				taskDefineShow.setStartTimeShow(sdf.format(task.getStartTime()));
+			}else{
+				taskDefineShow.setStartTimeShow("-");
+			}
+			
 			tasksShow.add(taskDefineShow);
 		}
 		return JSONObject.toJSONString(tasksShow);
@@ -119,7 +126,7 @@ public class MainController {
 	
 	@RequestMapping(value="/task", method =RequestMethod.POST)
 	@ResponseBody
-	public String addTask(TaskDefine taskDefine){
+	public String addTask(@ModelAttribute TaskDefine taskDefine){
 		log.info("添加定时任务：{}", JSONObject.toJSONString(taskDefine));
 		JSONObject result = new JSONObject();
 		taskDefine.setType(TaskDefine.TASK_TYPE_UNCODE);

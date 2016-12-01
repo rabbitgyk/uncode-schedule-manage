@@ -5,6 +5,7 @@ import cn.uncode.schedule.core.TaskDefine;
 public class TaskDefineShow extends TaskDefine {
 
 	private String lastRunningTimeShow;
+	private String startTimeShow;
 	
 	public TaskDefineShow(TaskDefine taskDefine){
 		this.setCronExpression(taskDefine.getCronExpression());
@@ -25,5 +26,13 @@ public class TaskDefineShow extends TaskDefine {
 
 	public void setLastRunningTimeShow(String lastRunningTimeShow) {
 		this.lastRunningTimeShow = lastRunningTimeShow;
+	}
+
+	public String getStartTimeShow() {
+		return startTimeShow;
+	}
+
+	public void setStartTimeShow(String startTimeShow) {
+		this.startTimeShow = startTimeShow;
 	}
 }
