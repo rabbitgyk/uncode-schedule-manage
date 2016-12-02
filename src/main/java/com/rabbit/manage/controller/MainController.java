@@ -28,11 +28,19 @@ import com.rabbit.manage.util.HttpClientUtil;
 public class MainController {
 	private Logger log = LoggerFactory.getLogger(MainController.class);
 
+	/**
+	 * 打开定时任务的管理页面
+	 * @return
+	 */
 	@RequestMapping("/page")
 	public String mPage(){
 		return "manage";
 	}
 	
+	/**
+	 * 获取所有的定时任务的执行节点的信息
+	 * @return
+	 */
 	@RequestMapping(value="/servers", method =RequestMethod.GET)
 	@ResponseBody
 	public String servers(){
@@ -66,6 +74,10 @@ public class MainController {
 		return JSONObject.toJSONString(result);
 	}
 	
+	/**
+	 * 获取所有的定时任务执行节点的ip
+	 * @return
+	 */
 	@RequestMapping(value="/server/ips", method =RequestMethod.GET)
 	@ResponseBody
 	public String serverIps(){
@@ -80,6 +92,10 @@ public class MainController {
 		return JSONObject.toJSONString(serverIps);
 	}
 	
+	/**
+	 * 获取所有的定时任务
+	 * @return
+	 */
 	@RequestMapping(value="/tasks", method =RequestMethod.GET)
 	@ResponseBody
 	public String tasks(){
@@ -106,6 +122,12 @@ public class MainController {
 		return JSONObject.toJSONString(tasksShow);
 	}
 	
+	/**
+	 * 定时任务的删除
+	 * @param targetBean
+	 * @param targetMethod
+	 * @return
+	 */
 	@RequestMapping(value="/task/del", method =RequestMethod.GET)
 	@ResponseBody
 	public String delTask(String targetBean, String targetMethod){
@@ -125,6 +147,11 @@ public class MainController {
 		return result.toJSONString();
 	}
 	
+	/**
+	 * 定时任务的添加
+	 * @param taskDefine
+	 * @return
+	 */
 	@RequestMapping(value="/task", method =RequestMethod.POST)
 	@ResponseBody
 	public String addTask(@ModelAttribute TaskDefine taskDefine){
@@ -141,6 +168,14 @@ public class MainController {
 		return result.toJSONString();
 	}
 	
+	/**
+	 * 定时任务的手动执行方法
+	 * @param executeUrl
+	 * @param bean
+	 * @param method
+	 * @param param
+	 * @return
+	 */
 	@RequestMapping(value="/task/execute", method =RequestMethod.POST)
 	@ResponseBody
 	public String runTask(String executeUrl, String bean, String method, String param){
