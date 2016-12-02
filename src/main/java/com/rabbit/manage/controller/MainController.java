@@ -21,6 +21,7 @@ import cn.uncode.schedule.core.TaskDefine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rabbit.manage.model.TaskDefineShow;
+import com.rabbit.manage.util.HttpClientUtil;
 
 @Controller
 @RequestMapping("/main")
@@ -138,6 +139,14 @@ public class MainController {
 		result.put("returnCode", "0000");
 		result.put("returnMsg", "add success");
 		return result.toJSONString();
+	}
+	
+	@RequestMapping(value="/task/execute", method =RequestMethod.POST)
+	@ResponseBody
+	public String runTask(String executeUrl, String bean, String method, String param){
+		String url = executeUrl + "?bean=" + bean + "&method=" + method + "&param=" + param;
+		log.info("手动执行定时任务的url：{}", url);
+		return HttpClientUtil.httpPost(url);
 	}
 	
 }
