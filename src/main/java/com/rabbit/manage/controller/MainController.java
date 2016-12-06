@@ -149,6 +149,7 @@ public class MainController {
 	
 	/**
 	 * 定时任务的添加
+	 * ajax 请求的 contentType : "application/x-www-form-urlencoded"
 	 * @param taskDefine
 	 * @return
 	 */
