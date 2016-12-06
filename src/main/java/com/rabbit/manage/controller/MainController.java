@@ -158,9 +158,19 @@ public class MainController {
 		log.info("添加定时任务：{}", JSONObject.toJSONString(taskDefine));
 		JSONObject result = new JSONObject();
 		taskDefine.setType(TaskDefine.TASK_TYPE_UNCODE);
-		// || StringUtils.isNotEmpty(taskDefine.getPeriod()+"")
-		if(StringUtils.isNotEmpty(taskDefine.getCronExpression())){
-			ConsoleManager.addScheduleTask(taskDefine);
+		if(StringUtils.isNotEmpty(taskDefine.getCronExpression()) || taskDefine.getPeriod() != 0){
+			try {
+				ConsoleManager.addScheduleTask(taskDefine);
+			} catch (Exception e) {
+				log.error(String.format("添加定时任务：%s", JSONObject.toJSONString(taskDefine)), e);
+				result.put("returnCode", "9999");
+				result.put("returnMsg", "task add exception");
+				return result.toJSONString();
+			}
+		}else{
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "task run time is not exist");
+			return result.toJSONString();
 		}
 		
 		result.put("returnCode", "0000");
