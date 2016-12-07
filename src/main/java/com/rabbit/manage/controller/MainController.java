@@ -117,6 +117,10 @@ public class MainController {
 				taskDefineShow.setStartTimeShow("-");
 			}
 			
+			if(task.getCronExpression() == null){
+				taskDefineShow.setCronExpression("-");
+			}
+			
 			tasksShow.add(taskDefineShow);
 		}
 		return JSONObject.toJSONString(tasksShow);
