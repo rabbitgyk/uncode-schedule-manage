@@ -21,95 +21,80 @@
 	    <script type="text/javascript" src="<%=basePath%>static/jquery-1.11.1/jquery.min.js"></script>
 	    <script type="text/javascript" src="<%=basePath%>static/bootstrap-3.3.0/js/bootstrap.min.js"></script>
 		<script>
+		
+			function onLoadPage(){
+	    		$.ajax({
+		        	type:"get",
+		        	async:"true",
+		        	url:"<%=basePath%>main/tasks",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			var arr = new Array();
+	    				$("#table2 tbody").empty();
+	    				for(var i=0;i<data.length;i++){
+	    					num = i+1;
+	    					var tr = "<tr><td>"+num+"</td><td class='targetBean'>"+data[i].targetBean+"</td><td class='targetMethod'>"+data[i].targetMethod+"</td>"+
+		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td><td>"+data[i].lastRunningTimeShow+"</td>"+
+		    						"<td>"+data[i].period+"</td><td class='spe-td'>"+data[i].currentServer+"</td><td>"+data[i].runTimes+"</td>"+
+		    						"<td>"+data[i].lastRunningTimeShow+"</td><td><a href='javascript:void(0)' onclick='delTask($(this))'>删除</a></td></tr>";
+		    				$("#table2 tbody").append(tr);
+		    				arr.push(data[i].currentServer);
+	    				}
+	    				$(".spe-td").mouseover(function(){
+	    					var inx = $(this).index();
+	    				}); 
+	    				$(".spe-td").each(function () {
+	    		            var td1 = $(this).html().split('$');
+	    		            $(this).html(td1[0]+"$.........$"+td1[td1.length-1]);
+	    		        });
+		    		}
+		        }); 
+	    	};
+	    	
+	    	function pageLoading(){
+	    		$.ajax({
+		        	type:"get",
+		        	async:"true",
+		        	url:"<%=basePath%>main/tasks",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			var arr = new Array();
+	    				$("#table3 tbody").empty();
+	    				var currentServer;
+	    				$.ajax({
+	    					type:"get",
+				        	async:"true",
+				        	url:"<%=basePath%>main/server/ips",
+				        	error : function(request) {
+				    			alert("error!");
+				    		},
+				    		success:function(data){
+				    			for(var i=0;i<data.length;i++){
+				    				options[i] = "<option>"+data[i]+"</option>";
+				    			}
+				    			//optionsArr = optionsArr.push(options[i]);
+				    			//currentServer = "select>"+optionsArr+"</select>";
+				    			//alert(optionsArr);
+				    		}
+	    				})
+	    				for(var i=0;i<data.length;i++){
+	    					num = i+1;
+	    					var tr = "<tr><td>"+num+"</td><td>"+data[i].targetBean+"</td><td>"+data[i].targetMethod+"</td>"+
+		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td>"+
+		    						"<td>"+data[i].period+"</td><td>"+currentServer+"</td>"+
+		    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal'>执行</a></td></tr>";
+		    				$("#table3 tbody").append(tr);
+		    				arr.push(data[i].currentServer);
+	    				}
+		    		}
+		    	})
+		    };
+		
 		    $(function () {
-		    	function onLoadPage(){
-		    		$.ajax({
-			        	type:"get",
-			        	async:"true",
-			        	url:"<%=basePath%>main/tasks",
-			        	error : function(request) {
-			    			alert("error!");
-			    		},
-			    		success:function(data){
-			    			var arr = new Array();
-		    				$("#table2 tbody").empty();
-		    				for(var i=0;i<data.length;i++){
-		    					num = i+1;
-		    					var tr = "<tr><td>"+num+"</td><td>"+data[i].targetBean+"</td><td>"+data[i].targetMethod+"</td>"+
-			    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td><td>"+data[i].lastRunningTimeShow+"</td>"+
-			    						"<td>"+data[i].period+"</td><td class='spe-td'>"+data[i].currentServer+"</td><td>"+data[i].runTimes+"</td>"+
-			    						"<td>"+data[i].lastRunningTimeShow+"</td><td class='del-tr'><a href='javascript:void (0)'>删除</a></td></tr>";
-			    				$("#table2 tbody").append(tr);
-			    				arr.push(data[i].currentServer);
-		    				}
-		    				$(".spe-td").mouseover(function(){
-		    					var inx = $(this).index();
-		    				}); 
-		    				$(".spe-td").each(function () {
-		    		            var td1 = $(this).html().split('$');
-		    		            $(this).html(td1[0]+"$.........$"+td1[td1.length-1]);
-		    		        });
-		    				$(".del-tr").click(function(){
-		    					var ins = $(this).parent().index();
-		    			    	$.ajax({
-		    			    		type:"get",
-		    			        	async:"true",
-		    			        	url:"<%=basePath%>main/task/del",
-		    			        	error : function(request) {
-		    			    			alert("error!");
-		    			    		},
-		    			    		success:function(data){
-		    			    			if(data.returnCode=="9999"){
-		    			    				var trs = $("#table2 tbody tr");
-		    			    				trs[ins].remove();
-		    			    				onLoadPage();
-		    			    			}
-		    			    		}
-		    			    	});
-		    			    });
-			    		}
-			        }); 
-		    	};
-		    	function pageLoading(){
-		    		$.ajax({
-			        	type:"get",
-			        	async:"true",
-			        	url:"<%=basePath%>main/tasks",
-			        	error : function(request) {
-			    			alert("error!");
-			    		},
-			    		success:function(data){
-			    			var arr = new Array();
-		    				$("#table3 tbody").empty();
-		    				var currentServer;
-		    				$.ajax({
-		    					type:"get",
-					        	async:"true",
-					        	url:"<%=basePath%>main/server/ips",
-					        	error : function(request) {
-					    			alert("error!");
-					    		},
-					    		success:function(data){
-					    			for(var i=0;i<data.length;i++){
-					    				options[i] = "<option>"+data[i]+"</option>";
-					    			}
-					    			//optionsArr = optionsArr.push(options[i]);
-					    			//currentServer = "select>"+optionsArr+"</select>";
-					    			//alert(optionsArr);
-					    		}
-		    				})
-		    				for(var i=0;i<data.length;i++){
-		    					num = i+1;
-		    					var tr = "<tr><td>"+num+"</td><td>"+data[i].targetBean+"</td><td>"+data[i].targetMethod+"</td>"+
-			    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td>"+
-			    						"<td>"+data[i].period+"</td><td>"+currentServer+"</td>"+
-			    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal'>执行</a></td></tr>";
-			    				$("#table3 tbody").append(tr);
-			    				arr.push(data[i].currentServer);
-		    				}
-			    		}
-			    	})
-			    };
 			    //初始化页面
 		    	onLoadPage();
 		    	//
@@ -153,6 +138,30 @@
 			       	modal.find('.modal-title').text(titleData + '定时任务');
 			  		});
 		    });
+		    
+		    // 删除任务
+		    function delTask(aLabel){
+		    	var targetBean =  aLabel.parents("tr").find(".targetBean").text();
+				var targetMethod = aLabel.parents("tr").find(".targetMethod").text();
+		    	$.ajax({
+		    		type:"get",
+		        	async:"true",
+		        	data:{targetBean:targetBean,targetMethod:targetMethod},
+		        	url:"<%=basePath%>main/task/del",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			if(data.returnCode=="0000"){
+		    				//trs[ins].remove();
+		    				onLoadPage();
+		    			}else{
+		    				alert(data.returnMsg);
+		    			}
+		    		}
+		    	});
+		    }
+		    
 		    //新增定时任务
 		   function formSubmit(){
 				$.ajax({
