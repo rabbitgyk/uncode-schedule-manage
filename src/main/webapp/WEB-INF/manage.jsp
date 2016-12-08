@@ -17,7 +17,7 @@
 	    <title>page</title>
 	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/bootstrap-3.3.0/css/blog.css">
 	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/bootstrap-3.3.0/css/bootstrap.min.css">
-	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/bootstrap-3.3.0/css/extraCSS.css">
+	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/css/extraCSS.css">
 	    <script type="text/javascript" src="<%=basePath%>static/jquery-1.11.1/jquery.min.js"></script>
 	    <script type="text/javascript" src="<%=basePath%>static/bootstrap-3.3.0/js/bootstrap.min.js"></script>
 		<script>
