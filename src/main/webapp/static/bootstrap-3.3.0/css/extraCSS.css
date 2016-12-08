@@ -1,0 +1,34 @@
+th,td{
+	font-size:14px;
+}
+
+a:focus{outline:none;}
+.table th,.table td{
+    text-align: center;
+}
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+    vertical-align: middle;
+}
+.blog-masthead .container{
+    width: 970px;
+}
+.table caption{
+    font-size:18px;
+    font-weight:bold;
+}
+.table-bordered > thead > tr > th{
+    border-bottom-width: 1px;
+}
+.add-btn{
+    float:right;
+    border: none;
+    border-radius: 3px;
+    background: #2a6496;
+    color: #fff;
+    font-weight: normal;
+    font-size: 14px;
+    width: 60px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+}
