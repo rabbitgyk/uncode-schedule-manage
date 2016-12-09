@@ -83,10 +83,10 @@
 	    				})
 	    				for(var i=0;i<data.length;i++){
 	    					num = i+1;
-	    					var tr = "<tr><td>"+num+"</td><td>"+data[i].targetBean+"</td><td>"+data[i].targetMethod+"</td>"+
+	    					var tr = "<tr><td>"+num+"</td><td class='targetBeanS'>"+data[i].targetBean+"</td><td class='targetMethodS'>"+data[i].targetMethod+"</td>"+
 		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td>"+
 		    						"<td>"+data[i].period+"</td><td>"+currentServer+"</td>"+
-		    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal'>执行</a></td></tr>";
+		    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal2' onclick='showSetTask($(this))'>执行</a></td></tr>";
 		    				$("#table3 tbody").append(tr);
 		    				arr.push(data[i].currentServer);
 	    				}
@@ -131,12 +131,12 @@
 		            var dj = $(this).index();
 		            $(".sign-div .container").eq(dj).show().siblings().hide();
 		        });
-		        $("#myModal").on('show.bs.modal', function(event){
+		        /* $("#myModal").on('show.bs.modal', function(event){
 				    var button = $(event.relatedTarget); 
 					var titleData = button.data('title'); 
 				    var modal = $(this)
 			       	modal.find('.modal-title').text(titleData + '定时任务');
-			  		});
+			  		}); */
 		    });
 		    
 		    // 删除任务
@@ -182,7 +182,17 @@
 		    			}
 		    		}
 				});
-			} 
+			}
+		    
+		    // 展示执行定时任务弹框的时候，取值并展示
+		    function showSetTask(taskRow){
+		    	var targetBean =  taskRow.parents("tr").find(".targetBeanS").text();
+				var targetMethod = taskRow.parents("tr").find(".targetMethodS").text();
+				$("#beanS").attr("value",targetBean);
+				$("#methodS").attr("value",targetMethod);
+				//alert(targetBean);
+				
+		    }
 		</script>
 	</head>
 
@@ -331,37 +341,37 @@
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="bean">bean名称<span style="color:red">*</span></label>
 	 										<div class="col-sm-6">
-	 											<input id="bean" name="bean" class="form-control" required="" type="text" readonly="readonly" value="${channelCode}">
+	 											<input id="beanS" name="targetBean" class="form-control" required="" type="text" readonly="readonly" >
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="method">方法名称<span style="color:red">*</span></label>
 	 										<div class="col-sm-6">
-	 											<input id="method" name="method" class="form-control" required="" type="text" readonly="readonly" value="${channelCode}">
+	 											<input id="methodS" name="targetMethod" class="form-control" required="" type="text" readonly="readonly" >
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="cronExpression">corn表达式</label>
 	 										<div class="col-sm-6">
-	 											<input id="cronExpression" name="cronExpression" class="form-control" required="" type="text">
+	 											<input id="cronExpressionS" name="cronExpression" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="period">周期（毫秒）</label>
 	 										<div class="col-sm-6">
-	 											<input id="period" name="period" class="form-control" required="" type="text">
+	 											<input id="periodS" name="period" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="startTime">开始时间</label>
 	 										<div class="col-sm-6">
-	 											<input id="startTime" name="startTime" class="form-control" required="" type="text">
+	 											<input id="startTimeS" name="startTime" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="param">参数(字符串)</label>
 	 										<div class="col-sm-6">
-	 											<input id="param" name="param" class="form-control" required="" type="text">
+	 											<input id="paramS" name="param" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	              		   				<div class="modal-footer">
