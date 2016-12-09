@@ -167,9 +167,8 @@
 				$.ajax({
 					type:"post",
 		        	async:"true",
-		        	data:{targetBean:$("#bean").val(),targetMethod:$("#method").val(),cronExpression:$("#cronExpression").val(),period:$("#period").val(),startTime:$("#startTime").val(),params:$("#param").val()},
+		        	data:{targetBean:$("#bean").val(),targetMethod:$("#method").val(),cronExpression:$("#cronExpression").val(),periodShow:$("#period").val(),startTimeShow:$("#startTime").val(),params:$("#param").val()},
 		        	url:"<%=basePath%>main/task",
-		        	//contentType : "application/x-www-form-urlencoded",
 		        	error : function(request) {
 		    			alert("error!");
 		    		},
@@ -179,7 +178,7 @@
 			    			$("#myModal").hide();
 			    			onLoadPage();
 		    			}else{
-		    				alert(returnMsg);
+		    				alert(data.returnMsg);
 		    			}
 		    		}
 				});
@@ -270,13 +269,13 @@
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="bean">bean名称<span style="color:red">*</span></label>
 	 										<div class="col-sm-6">
-	 											<input id="bean" name="bean" class="form-control" required="" type="text">
+	 											<input id="bean" name="targetBean" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="method">方法名称<span style="color:red">*</span></label>
 	 										<div class="col-sm-6">
-	 											<input id="method" name="method" class="form-control" required="" type="text">
+	 											<input id="method" name="targetMethod" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
@@ -288,13 +287,13 @@
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="period">周期（毫秒）</label>
 	 										<div class="col-sm-6">
-	 											<input id="period" name="period" class="form-control" required="" type="text">
+	 											<input id="period" name="periodShow" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="startTime">开始时间</label>
 	 										<div class="col-sm-6">
-	 											<input id="startTime" name="startTime" class="form-control" required="" type="text">
+	 											<input id="startTime" name="startTimeShow" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">

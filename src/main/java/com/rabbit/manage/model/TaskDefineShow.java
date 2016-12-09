@@ -6,6 +6,11 @@ public class TaskDefineShow extends TaskDefine {
 
 	private String lastRunningTimeShow;
 	private String startTimeShow;
+	private String periodShow;
+	
+	public TaskDefineShow(){
+		
+	}
 	
 	public TaskDefineShow(TaskDefine taskDefine){
 		this.setCronExpression(taskDefine.getCronExpression());
@@ -34,5 +39,13 @@ public class TaskDefineShow extends TaskDefine {
 
 	public void setStartTimeShow(String startTimeShow) {
 		this.startTimeShow = startTimeShow;
+	}
+
+	public String getPeriodShow() {
+		return periodShow;
+	}
+
+	public void setPeriodShow(String periodShow) {
+		this.periodShow = periodShow;
 	}
 }
