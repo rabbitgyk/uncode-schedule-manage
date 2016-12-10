@@ -217,8 +217,8 @@ public class MainController {
 	 */
 	@RequestMapping(value="/task/execute", method =RequestMethod.POST)
 	@ResponseBody
-	public String runTask(String executeUrl, String bean, String method, String param){
-		String url = executeUrl + "?bean=" + bean + "&method=" + method + "&param=" + param;
+	public String runTask(String executeUrl, String bean, String method, String params){
+		String url = executeUrl + "?bean=" + bean + "&method=" + method + "&param=" + params;
 		log.info("手动执行定时任务的url：{}", url);
 		return HttpClientUtil.httpPost(url);
 	}
