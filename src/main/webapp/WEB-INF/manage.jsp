@@ -225,7 +225,7 @@
         <div class="container">
             <nav class="blog-nav">
                 <a class="blog-nav-item active" href="#" id="item1">Home</a>
-                <a class="blog-nav-item" href="#" id="item2">New features</a>
+                <a class="blog-nav-item" href="#" id="item2">Manual</a>
             </nav>
         </div>
     </div>
@@ -266,7 +266,7 @@
             </table>
         </div>
         <div class="container" style="display: none">
-            <h2 class="text-center">监控界面</h2>
+            <h2 class="text-center">手动执行界面</h2>
             <table class="table table-bordered table-condensed table-hover" id="table3">
                 <caption>定时任务列表</caption>
                 <thead>
