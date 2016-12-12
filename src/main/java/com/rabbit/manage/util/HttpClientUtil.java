@@ -26,12 +26,12 @@ public class HttpClientUtil {
 	private static String HTTP = "http";
 	private static String HTTPS = "https";
 	
-	public static String httpPost(String url){
+	public static String httpPost(String url) throws Exception{
 		HttpPost httppost = new HttpPost(url);
 		return executeHttp(httppost, getHttpType(url));
 	}
 	
-	public static String httpGet(String url){
+	public static String httpGet(String url) throws Exception{
 		HttpGet httpget = new HttpGet(url);
 		return executeHttp(httpget, getHttpType(url));
 	}
@@ -71,7 +71,7 @@ public class HttpClientUtil {
 	 * @param request
 	 * @return
 	 */
-	private static String executeHttp(HttpUriRequest request, String type){
+	private static String executeHttp(HttpUriRequest request, String type) throws Exception{
 		String result = null;
 		CloseableHttpResponse response = null;
 		CloseableHttpClient httpclient = null;
@@ -85,7 +85,7 @@ public class HttpClientUtil {
 			HttpEntity myEntity = response.getEntity();  
 			result = EntityUtils.toString(myEntity);  
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}finally{
 			try {
 				response.close();

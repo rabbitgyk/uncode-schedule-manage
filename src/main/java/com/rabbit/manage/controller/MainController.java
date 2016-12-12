@@ -220,7 +220,15 @@ public class MainController {
 	public String runTask(String executeUrl, String bean, String method, String params){
 		String url = executeUrl + "?bean=" + bean + "&method=" + method + "&param=" + params;
 		log.info("手动执行定时任务的url：{}", url);
-		return HttpClientUtil.httpPost(url);
+		JSONObject result = new JSONObject();
+		try {
+			return HttpClientUtil.httpPost(url);
+		} catch (Exception e) {
+			log.error("手动执行出现异常：", e);
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "manual execute task exception");
+		}
+		return result.toJSONString();
 	}
 	
 }

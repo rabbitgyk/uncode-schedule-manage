@@ -64,7 +64,6 @@
 		    		success:function(data){
 		    			var arr = new Array();
 	    				$("#table3 tbody").empty();
-	    				var currentServer;
 	    				$.ajax({
 	    					type:"get",
 				        	async:"true",
@@ -74,18 +73,18 @@
 				    		},
 				    		success:function(data){
 				    			for(var i=0;i<data.length;i++){
-				    				options[i] = "<option>"+data[i]+"</option>";
+				    				var options = "<option>"+data[i]+"</option>";
+				    				sel = $(".sel");
+				    				sel.append(options);
 				    			}
-				    			//optionsArr = optionsArr.push(options[i]);
-				    			//currentServer = "select>"+optionsArr+"</select>";
-				    			//alert(optionsArr);
+				    			
 				    		}
 	    				})
 	    				for(var i=0;i<data.length;i++){
 	    					num = i+1;
 	    					var tr = "<tr><td>"+num+"</td><td class='targetBeanS'>"+data[i].targetBean+"</td><td class='targetMethodS'>"+data[i].targetMethod+"</td>"+
 		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td>"+
-		    						"<td>"+data[i].period+"</td><td>"+currentServer+"</td>"+
+		    						"<td>"+data[i].period+"</td><td><select class='sel'></select></td>"+
 		    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal2' onclick='showSetTask($(this))'>执行</a></td></tr>";
 		    				$("#table3 tbody").append(tr);
 		    				arr.push(data[i].currentServer);
@@ -191,8 +190,8 @@
 				$("#beanS").attr("value",targetBean);
 				$("#methodS").attr("value",targetMethod);
 				// 执行节点赋值
-				
-				
+				var ip =  taskRow.parents("tr").find(".sel").val();
+				$("#executeUrlFront").html("http://"+ip+":");
 		    }
 		    
 		    // 执行任务方法
