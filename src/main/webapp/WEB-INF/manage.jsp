@@ -36,7 +36,7 @@
 	    				for(var i=0;i<data.length;i++){
 	    					num = i+1;
 	    					var tr = "<tr><td>"+num+"</td><td class='targetBean'>"+data[i].targetBean+"</td><td class='targetMethod'>"+data[i].targetMethod+"</td>"+
-		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td><td>"+data[i].lastRunningTimeShow+"</td>"+
+		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td><td>"+data[i].startTimeShow+"</td>"+
 		    						"<td>"+data[i].period+"</td><td class='spe-td'>"+data[i].currentServer+"</td><td>"+data[i].runTimes+"</td>"+
 		    						"<td>"+data[i].lastRunningTimeShow+"</td><td><a href='javascript:void(0)' onclick='delTask($(this))'>删除</a></td></tr>";
 		    				$("#table2 tbody").append(tr);
