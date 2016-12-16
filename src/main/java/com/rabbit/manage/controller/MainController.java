@@ -2,6 +2,7 @@ package com.rabbit.manage.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,6 +188,8 @@ public class MainController {
 			}
 			if(StringUtils.isNotEmpty(taskDefine.getStartTimeShow())){
 				taskDefine.setStartTime(sdf.parse(taskDefine.getStartTimeShow()));
+			}else{
+				taskDefine.setStartTime(new Date());
 			}
 			if(StringUtils.isEmpty(taskDefine.getCronExpression())){
 				taskDefine.setCronExpression(null);
