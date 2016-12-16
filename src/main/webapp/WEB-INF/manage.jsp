@@ -17,99 +17,83 @@
 	    <title>page</title>
 	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/bootstrap-3.3.0/css/blog.css">
 	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/bootstrap-3.3.0/css/bootstrap.min.css">
-	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/bootstrap-3.3.0/css/extraCSS.css">
+	    <link type="text/css" rel="stylesheet" href="<%=basePath%>static/css/extraCSS.css">
 	    <script type="text/javascript" src="<%=basePath%>static/jquery-1.11.1/jquery.min.js"></script>
 	    <script type="text/javascript" src="<%=basePath%>static/bootstrap-3.3.0/js/bootstrap.min.js"></script>
 		<script>
+		
+			function onLoadPage(){
+	    		$.ajax({
+		        	type:"get",
+		        	async:"true",
+		        	url:"<%=basePath%>main/tasks",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			var arr = new Array();
+	    				$("#table2 tbody").empty();
+	    				for(var i=0;i<data.length;i++){
+	    					num = i+1;
+	    					var tr = "<tr><td>"+num+"</td><td class='targetBean'>"+data[i].targetBean+"</td><td class='targetMethod'>"+data[i].targetMethod+"</td>"+
+		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td><td>"+data[i].startTimeShow+"</td>"+
+		    						"<td>"+data[i].period+"</td><td class='spe-td'>"+data[i].currentServer+"</td><td>"+data[i].runTimes+"</td>"+
+		    						"<td>"+data[i].lastRunningTimeShow+"</td><td><a href='javascript:void(0)' onclick='delTask($(this))'>删除</a></td></tr>";
+		    				$("#table2 tbody").append(tr);
+		    				arr.push(data[i].currentServer);
+	    				}
+	    				$(".spe-td").mouseover(function(){
+	    					var inx = $(this).index();
+	    				}); 
+	    				$(".spe-td").each(function () {
+	    		            var td1 = $(this).html().split('$');
+	    		            $(this).html(td1[0]+"$.........$"+td1[td1.length-1]);
+	    		        });
+		    		}
+		        }); 
+	    	};
+	    	
+	    	function pageLoading(){
+	    		$.ajax({
+		        	type:"get",
+		        	async:"true",
+		        	url:"<%=basePath%>main/tasks",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			var arr = new Array();
+	    				$("#table3 tbody").empty();
+	    				$.ajax({
+	    					type:"get",
+				        	async:"true",
+				        	url:"<%=basePath%>main/server/ips",
+				        	error : function(request) {
+				    			alert("error!");
+				    		},
+				    		success:function(data){
+				    			for(var i=0;i<data.length;i++){
+				    				var options = "<option>"+data[i]+"</option>";
+				    				sel = $(".sel");
+				    				sel.append(options);
+				    			}
+				    			
+				    		}
+	    				})
+	    				for(var i=0;i<data.length;i++){
+	    					num = i+1;
+	    					var tr = "<tr><td>"+num+"</td><td class='targetBeanS'>"+data[i].targetBean+"</td><td class='targetMethodS'>"+data[i].targetMethod+"</td>"+
+		    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td>"+
+		    						"<td>"+data[i].period+"</td><td><select class='sel'></select></td>"+
+		    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal2' onclick='showSetTask($(this))'>执行</a></td></tr>";
+		    				$("#table3 tbody").append(tr);
+		    				arr.push(data[i].currentServer);
+	    				}
+		    		}
+		    	})
+		    };
+		
 		    $(function () {
-		    	function onLoadPage(){
-		    		$.ajax({
-			        	type:"get",
-			        	async:"true",
-			        	url:"<%=basePath%>main/tasks",
-			        	error : function(request) {
-			    			alert("error!");
-			    		},
-			    		success:function(data){
-			    			var arr = new Array();
-		    				$("#table2 tbody").empty();
-		    				for(var i=0;i<data.length;i++){
-		    					num = i+1;
-		    					var tr = "<tr><td>"+num+"</td><td>"+data[i].targetBean+"</td><td>"+data[i].targetMethod+"</td>"+
-			    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td><td>"+data[i].lastRunningTimeShow+"</td>"+
-			    						"<td>"+data[i].period+"</td><td class='spe-td'>"+data[i].currentServer+"</td><td>"+data[i].runTimes+"</td>"+
-			    						"<td>"+data[i].lastRunningTimeShow+"</td><td class='del-tr'><a href='javascript:void (0)'>删除</a></td></tr>";
-			    				$("#table2 tbody").append(tr);
-			    				arr.push(data[i].currentServer);
-		    				}
-		    				$(".spe-td").mouseover(function(){
-		    					var inx = $(this).index();
-		    				}); 
-		    				$(".spe-td").each(function () {
-		    		            var td1 = $(this).html().split('$');
-		    		            $(this).html(td1[0]+"$.........$"+td1[td1.length-1]);
-		    		        });
-		    				$(".del-tr").click(function(){
-		    					var ins = $(this).parent().index();
-		    			    	$.ajax({
-		    			    		type:"get",
-		    			        	async:"true",
-		    			        	url:"<%=basePath%>main/task/del",
-		    			        	error : function(request) {
-		    			    			alert("error!");
-		    			    		},
-		    			    		success:function(data){
-		    			    			if(data.returnCode=="9999"){
-		    			    				var trs = $("#table2 tbody tr");
-		    			    				trs[ins].remove();
-		    			    				onLoadPage();
-		    			    			}
-		    			    		}
-		    			    	});
-		    			    });
-			    		}
-			        }); 
-		    	};
-		    	function pageLoading(){
-		    		$.ajax({
-			        	type:"get",
-			        	async:"true",
-			        	url:"<%=basePath%>main/tasks",
-			        	error : function(request) {
-			    			alert("error!");
-			    		},
-			    		success:function(data){
-			    			var arr = new Array();
-		    				$("#table3 tbody").empty();
-		    				var currentServer;
-		    				$.ajax({
-		    					type:"get",
-					        	async:"true",
-					        	url:"<%=basePath%>main/server/ips",
-					        	error : function(request) {
-					    			alert("error!");
-					    		},
-					    		success:function(data){
-					    			for(var i=0;i<data.length;i++){
-					    				options[i] = "<option>"+data[i]+"</option>";
-					    			}
-					    			//optionsArr = optionsArr.push(options[i]);
-					    			//currentServer = "select>"+optionsArr+"</select>";
-					    			//alert(optionsArr);
-					    		}
-		    				})
-		    				for(var i=0;i<data.length;i++){
-		    					num = i+1;
-		    					var tr = "<tr><td>"+num+"</td><td>"+data[i].targetBean+"</td><td>"+data[i].targetMethod+"</td>"+
-			    						"<td>"+data[i].type+"</td><td>"+data[i].cronExpression+"</td>"+
-			    						"<td>"+data[i].period+"</td><td>"+currentServer+"</td>"+
-			    						"<td class='del-tr'><a href='javascript:void (0)' data-toggle='modal' data-target='#myModal'>执行</a></td></tr>";
-			    				$("#table3 tbody").append(tr);
-			    				arr.push(data[i].currentServer);
-		    				}
-			    		}
-			    	})
-			    };
 			    //初始化页面
 		    	onLoadPage();
 		    	//
@@ -146,21 +130,44 @@
 		            var dj = $(this).index();
 		            $(".sign-div .container").eq(dj).show().siblings().hide();
 		        });
-		        $("#myModal").on('show.bs.modal', function(event){
+		        /* $("#myModal").on('show.bs.modal', function(event){
 				    var button = $(event.relatedTarget); 
 					var titleData = button.data('title'); 
 				    var modal = $(this)
 			       	modal.find('.modal-title').text(titleData + '定时任务');
-			  		});
+			  		}); */
 		    });
+		    
+		    // 删除任务
+		    function delTask(aLabel){
+		    	var targetBean =  aLabel.parents("tr").find(".targetBean").text();
+				var targetMethod = aLabel.parents("tr").find(".targetMethod").text();
+		    	$.ajax({
+		    		type:"get",
+		        	async:"true",
+		        	data:{targetBean:targetBean,targetMethod:targetMethod},
+		        	url:"<%=basePath%>main/task/del",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			if(data.returnCode=="0000"){
+		    				//trs[ins].remove();
+		    				onLoadPage();
+		    			}else{
+		    				alert(data.returnMsg);
+		    			}
+		    		}
+		    	});
+		    }
+		    
 		    //新增定时任务
 		   function formSubmit(){
 				$.ajax({
 					type:"post",
 		        	async:"true",
-		        	data:{targetBean:$("#bean").val(),targetMethod:$("#method").val(),cronExpression:$("#cronExpression").val(),period:$("#period").val(),startTime:$("#startTime").val(),params:$("#param").val()},
+		        	data:{targetBean:$("#bean").val(),targetMethod:$("#method").val(),cronExpression:$("#cronExpression").val(),periodShow:$("#period").val(),startTimeShow:$("#startTime").val(),params:$("#param").val()},
 		        	url:"<%=basePath%>main/task",
-		        	//contentType : "application/x-www-form-urlencoded",
 		        	error : function(request) {
 		    			alert("error!");
 		    		},
@@ -170,11 +177,46 @@
 			    			$("#myModal").hide();
 			    			onLoadPage();
 		    			}else{
-		    				alert(returnMsg);
+		    				alert(data.returnMsg);
 		    			}
 		    		}
 				});
-			} 
+			}
+		    
+		    // 展示执行定时任务弹框的时候，取值并展示
+		    function showSetTask(taskRow){
+		    	var targetBean =  taskRow.parents("tr").find(".targetBeanS").text();
+				var targetMethod = taskRow.parents("tr").find(".targetMethodS").text();
+				$("#beanS").attr("value",targetBean);
+				$("#methodS").attr("value",targetMethod);
+				// 执行节点赋值
+				var ip =  taskRow.parents("tr").find(".sel").val();
+				$("#executeUrlFront").html("http://"+ip+":");
+		    }
+		    
+		    // 执行任务方法
+		    function executeTask(){
+		    	var executeUrl = $("#executeUrlFront").html() + $("#executeUrlS").val() + $("#executeUrlEnd").html();
+		    	$.ajax({
+					type:"post",
+		        	async:"true",
+		        	data:{bean:$("#beanS").val(),method:$("#methodS").val(),params:$("#paramS").val(),executeUrl:executeUrl},
+		        	url:"<%=basePath%>main/task/execute",
+		        	error : function(request) {
+		    			alert("error!");
+		    		},
+		    		success:function(data){
+		    			if(data.returnCode=="0000"){
+		    				$(".modal-dialog").hide();
+			    			$("#myModal").hide();
+			    			onLoadPage();
+		    			}else{
+		    				alert(data.returnMsg);
+		    			}
+		    		}
+				});
+		    }
+		    
 		</script>
 	</head>
 
@@ -183,7 +225,7 @@
         <div class="container">
             <nav class="blog-nav">
                 <a class="blog-nav-item active" href="#" id="item1">Home</a>
-                <a class="blog-nav-item" href="#" id="item2">New features</a>
+                <a class="blog-nav-item" href="#" id="item2">Manual</a>
             </nav>
         </div>
     </div>
@@ -224,7 +266,7 @@
             </table>
         </div>
         <div class="container" style="display: none">
-            <h2 class="text-center">监控界面</h2>
+            <h2 class="text-center">手动执行界面</h2>
             <table class="table table-bordered table-condensed table-hover" id="table3">
                 <caption>定时任务列表</caption>
                 <thead>
@@ -261,13 +303,13 @@
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="bean">bean名称<span style="color:red">*</span></label>
 	 										<div class="col-sm-6">
-	 											<input id="bean" name="bean" class="form-control" required="" type="text">
+	 											<input id="bean" name="targetBean" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="method">方法名称<span style="color:red">*</span></label>
 	 										<div class="col-sm-6">
-	 											<input id="method" name="method" class="form-control" required="" type="text">
+	 											<input id="method" name="targetMethod" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
@@ -279,13 +321,13 @@
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="period">周期（毫秒）</label>
 	 										<div class="col-sm-6">
-	 											<input id="period" name="period" class="form-control" required="" type="text">
+	 											<input id="period" name="periodShow" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="startTime">开始时间</label>
 	 										<div class="col-sm-6">
-	 											<input id="startTime" name="startTime" class="form-control" required="" type="text">
+	 											<input id="startTime" name="startTimeShow" class="form-control" required="" type="text">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
@@ -312,22 +354,6 @@
 	         <div class="modal-dialog">
 	             <div class="modal-content">
 	                 <div class="modal-header">
-	                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	                     <h4 class="modal-title">定时任务</h4>
-	                 </div>
-	                 <div class="modal-body">
-	 					<div class="container">
-	 						<form id="addform" method="post" action="/uncode-schedule-manage/uncode/schedule" class="form-horizontal">
-	 						<div class="row">
-	 							<div class="col-md-6">
-	 									<div class="form-group">
-	 										<label class="col-sm-4 control-label" for="bean">bean名称<span style="color:red">*</span></label>
-	 										<div class="col-sm-6">
-	 											<input id="bean" name="bean" class="form-control" required="" type="text" readonly="readonly" value="${channelCode}">
-	 										</div>
-	 									</div>
-	 									<div class="form-group">
-	 										<label class="col-sm-4 control-label" for="method">方法名称<span style="color:red">*</span></label>
 	                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	                     <h4 class="modal-title">定时任务</h4>
 	                 </div>

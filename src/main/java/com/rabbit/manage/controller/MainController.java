@@ -27,6 +27,8 @@ import com.rabbit.manage.util.HttpClientUtil;
 @RequestMapping("/main")
 public class MainController {
 	private Logger log = LoggerFactory.getLogger(MainController.class);
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	/**
 	 * 打开定时任务的管理页面
@@ -102,7 +104,7 @@ public class MainController {
 		List<TaskDefineShow> tasksShow = new ArrayList<TaskDefineShow>();
 		List<TaskDefine> tasks = ConsoleManager.queryScheduleTask();
 		log.info("获取到的所有的task list：{}", JSONObject.toJSONString(tasks));
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		for(TaskDefine task : tasks){
 			TaskDefineShow taskDefineShow = new TaskDefineShow(task);
 			if(task.getLastRunningTime() > 0){
@@ -159,22 +161,44 @@ public class MainController {
 	 */
 	@RequestMapping(value="/task", method =RequestMethod.POST)
 	@ResponseBody
-	public String addTask(@ModelAttribute TaskDefine taskDefine){
+	public String addTask(@ModelAttribute TaskDefineShow taskDefine){
 		log.info("添加定时任务：{}", JSONObject.toJSONString(taskDefine));
 		JSONObject result = new JSONObject();
 		taskDefine.setType(TaskDefine.TASK_TYPE_UNCODE);
-		if(StringUtils.isNotEmpty(taskDefine.getCronExpression()) || taskDefine.getPeriod() != 0){
-			try {
-				ConsoleManager.addScheduleTask(taskDefine);
-			} catch (Exception e) {
-				log.error(String.format("添加定时任务：%s", JSONObject.toJSONString(taskDefine)), e);
-				result.put("returnCode", "9999");
-				result.put("returnMsg", "task add exception");
-				return result.toJSONString();
-			}
-		}else{
+		if(StringUtils.isEmpty(taskDefine.getTargetBean()) || StringUtils.isEmpty(taskDefine.getTargetMethod())){
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "task bean or method is null");
+			return result.toJSONString();
+		}
+		if(StringUtils.isNotEmpty(taskDefine.getCronExpression()) && StringUtils.isNotEmpty(taskDefine.getPeriodShow())){
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "task run time is confict");
+			return result.toJSONString();
+		}
+		if(StringUtils.isEmpty(taskDefine.getCronExpression()) && StringUtils.isEmpty(taskDefine.getPeriodShow())){
 			result.put("returnCode", "9999");
 			result.put("returnMsg", "task run time is not exist");
+			return result.toJSONString();
+		}
+		
+		try {
+			if(StringUtils.isNotEmpty(taskDefine.getPeriodShow())){
+				taskDefine.setPeriod(Long.parseLong(taskDefine.getPeriodShow()));
+			}
+			if(StringUtils.isNotEmpty(taskDefine.getStartTimeShow())){
+				taskDefine.setStartTime(sdf.parse(taskDefine.getStartTimeShow()));
+			}
+			if(StringUtils.isEmpty(taskDefine.getCronExpression())){
+				taskDefine.setCronExpression(null);
+			}
+			if(StringUtils.isEmpty(taskDefine.getParams())){
+				taskDefine.setParams(null);
+			}
+			ConsoleManager.addScheduleTask(taskDefine);
+		} catch (Exception e) {
+			log.error(String.format("添加定时任务：%s", JSONObject.toJSONString(taskDefine)), e);
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "task add exception");
 			return result.toJSONString();
 		}
 		
@@ -193,10 +217,18 @@ public class MainController {
 	 */
 	@RequestMapping(value="/task/execute", method =RequestMethod.POST)
 	@ResponseBody
-	public String runTask(String executeUrl, String bean, String method, String param){
-		String url = executeUrl + "?bean=" + bean + "&method=" + method + "&param=" + param;
+	public String runTask(String executeUrl, String bean, String method, String params){
+		String url = executeUrl + "?bean=" + bean + "&method=" + method + "&param=" + params;
 		log.info("手动执行定时任务的url：{}", url);
-		return HttpClientUtil.httpPost(url);
+		JSONObject result = new JSONObject();
+		try {
+			return HttpClientUtil.httpPost(url);
+		} catch (Exception e) {
+			log.error("手动执行出现异常：", e);
+			result.put("returnCode", "9999");
+			result.put("returnMsg", "manual execute task exception");
+		}
+		return result.toJSONString();
 	}
 	
 }
