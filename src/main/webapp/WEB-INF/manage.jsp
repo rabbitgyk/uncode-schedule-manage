@@ -328,37 +328,43 @@
 	 									</div>
 	 									<div class="form-group">
 	 										<label class="col-sm-4 control-label" for="method">方法名称<span style="color:red">*</span></label>
-	 										<div class="col-sm-6">
-	 											<input id="method" name="method" class="form-control" required="" type="text" readonly="readonly" value="${channelCode}">
+	                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	                     <h4 class="modal-title">定时任务</h4>
+	                 </div>
+	                 <div class="modal-body">
+	 					<div class="container">
+	 						<form id="addform" method="post" action="/uncode-schedule-manage/uncode/schedule" class="form-horizontal">
+	 						<div class="row">
+	 							<div class="col-md-6">
+	 									<div class="form-group">
+	 										<label class="col-sm-2 control-label" for="beanS">bean名称</label>
+	 										<div class="col-sm-10">
+	 											<input id="beanS" name="bean" class="form-control" type="text" readonly="readonly" >
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
-	 										<label class="col-sm-4 control-label" for="cronExpression">corn表达式</label>
-	 										<div class="col-sm-6">
-	 											<input id="cronExpression" name="cronExpression" class="form-control" required="" type="text">
+	 										<label class="col-sm-2 control-label" for="methodS">方法名称</label>
+	 										<div class="col-sm-10">
+	 											<input id="methodS" name="method" class="form-control" type="text" readonly="readonly" >
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
-	 										<label class="col-sm-4 control-label" for="period">周期（毫秒）</label>
-	 										<div class="col-sm-6">
-	 											<input id="period" name="period" class="form-control" required="" type="text">
+	 										<label class="col-sm-2 control-label" for="paramS">参数</label>
+	 										<div class="col-sm-10">
+	 											<input id="paramS" name="param" class="form-control" type="text" placeholder="可传入一个参数">
 	 										</div>
 	 									</div>
 	 									<div class="form-group">
-	 										<label class="col-sm-4 control-label" for="startTime">开始时间</label>
-	 										<div class="col-sm-6">
-	 											<input id="startTime" name="startTime" class="form-control" required="" type="text">
-	 										</div>
+	 										<label class="col-sm-2 control-label" for="param">执行url</label>
+	 										<div class="input-group col-sm-10">
+												<span class="input-group-addon" id="executeUrlFront">http://192.168.7.230:</span>
+												<input id="executeUrlS" name="executeUrl" class="form-control" type="text" placeholder="端口/项目名称">
+												<span class="input-group-addon" id="executeUrlEnd">/schedule/manual</span>
+											</div>
 	 									</div>
-	 									<div class="form-group">
-	 										<label class="col-sm-4 control-label" for="param">参数(字符串)</label>
-	 										<div class="col-sm-6">
-	 											<input id="param" name="param" class="form-control" required="" type="text">
-	 										</div>
-	 									</div>
-	              		   				<div class="modal-footer">
+										<div class="modal-footer">
 	               		      				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-	               		      				<button type="button" onclick="formSubmit()" class="btn btn-primary">保存</button>
+	               		      				<button type="button" onclick="executeTask()" class="btn btn-primary">执行</button>
 	             	    				</div>
 	                 				</div>
 	                 			</div>
